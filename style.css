@@ -1,0 +1,37 @@
+* {
+    padding: 0;
+    margin: 0;
+    background-color: black;
+}
+
+.bulle {
+    background-color: aqua;
+    border-radius: 50%;
+    position: absolute;
+    opacity: 0.2;
+    filter: hue-rotate(0);
+    animation: bubulle 10s forwards;
+    cursor: crosshair;
+}
+
+@keyframes bubulle {
+    to {
+        top: -300px;
+        opacity: 1;
+        filter: hue-rotate(720deg);
+    }
+}
+
+h1 {
+    background-color: rgb(255, 255, 255);
+    color: brown;
+    display: inline-block;
+    padding: 0 20px;
+    border-radius: 0 0 20px 0;
+    height: 50px;
+}
+
+h1 span {
+    background-color: transparent;
+    color: brown;
+}

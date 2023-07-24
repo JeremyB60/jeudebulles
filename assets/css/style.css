@@ -1,136 +1,214 @@
 * {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
+}
+
+@font-face {
+  font-family: dateStamp;
+  src: url(../fonts/Date\ Stamp.otf);
+}
+
+@font-face {
+  font-family: raleway;
+  src: url(../fonts/Raleway-VariableFont_wght.ttf);
+}
+
+@font-face {
+  font-family: roboto;
+  src: url(../fonts/Roboto-Regular.ttf);
 }
 
 body {
-    background-color: black;
-    overflow: hidden;
+  background-color: black;
+  overflow: hidden;
 }
 
 .bulle {
-    background-color: aqua;
-    border-radius: 50%;
-    position: absolute;
-    opacity: 0.2;
-    filter: hue-rotate(0);
-    animation: bubulle 10s forwards;
-    cursor: crosshair;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
+  background-color: aqua;
+  border-radius: 50%;
+  position: absolute;
+  opacity: 0.2;
+  filter: hue-rotate(0);
+  animation: bubulle 10s forwards;
+  cursor: crosshair;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
 }
 
 .bulle p {
-    color: red;
+  color: red;
 }
 
 @keyframes bubulle {
-    to {
-        top: -300px;
-        opacity: 1;
-        filter: hue-rotate(720deg);
-    }
+  to {
+    top: -300px;
+    opacity: 1;
+    filter: hue-rotate(720deg);
+  }
 }
 
 .score {
-    background-color: grey;
-    font-size: 30px;
-    width: 100%;
-    position: absolute;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 10px;
-    z-index: 10;
-    text-align: center;
-    font-size: 1.5em;
+  background-color: grey;
+  font-size: 30px;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  z-index: 10;
+  text-align: center;
+  font-size: 1.5em;
+  font-family: raleway;
+}
+
+#chronometre {
+  font-family: dateStamp;
 }
 
 .score span {
-    padding: 0 20px;
+  padding: 0 20px;
 }
 
 .score button {
-    padding: 5px 10px;
-    background-color: black;
-    color: white;
-    font-size: 1rem;
+  padding: 5px 10px;
+  background-color: black;
+  color: white;
+  font-size: 1rem;
+  font-family: roboto;
+  border: 2px groove rgba(255, 166, 0, 0.631);
+  cursor: pointer;
+  border-radius: 15px;
+}
+
+.score button:hover {
+  background-color: orange;
+  color: black;
+  border: 2px groove black;
+}
+
+.bulles {
+    display: none;
+}
+
+.points,
+.bulles {
+  text-transform: capitalize;
 }
 
 @media screen and (max-width: 700px) {
-    .score {
-        width: fit-content;
-        background-color: transparent;
-        color: whitesmoke;
-        font-size: 1em;
-        gap: 3px;
-    }
+  .score {
+    background-color: transparent;
+    color: whitesmoke;
+    font-size: 1em;
+    gap: 3px;
+  }
 
-    .score button {
-        font-size: 1em;
-    }
-    .score span {
-        padding: 0 5px;
-    }
+  .score button {
+    font-size: 1em;
+  }
+  .score span {
+    padding: 0 5px;
+  }
 }
 
 /* Ajoutez ce code CSS dans votre balise <style> ou un fichier CSS externe */
 #popup-overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 98;
-  }
-  
-  #popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    z-index: 99;
-  }
-  
-  #closeButton {
-    margin-top: 10px;
-    margin-right: 10px;
-    position: absolute;
-    top: 0;
-    right: 0;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Appliquer des styles aux cellules d'en-tête */
-  th {
-    background-color: #f2f2f2;
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-  }
-  
-  /* Appliquer des styles aux cellules de données */
-  td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: center;
-  }
-  
-  /* Appliquer une couleur de fond alternée aux lignes pour une meilleure lisibilité */
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 98;
+}
+
+#popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  padding: 20px;
+  background-color: grey;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 99;
+  font-family: roboto;
+  border: 10px double rgb(109, 29, 0);
+  border-radius: 20px;
+}
+
+#closeButton {
+  margin-top: 10px;
+  margin-right: 10px;
+  width: 30px;
+  height: 30px;
+  position: absolute;
+  border-radius: 50%;
+  background-color: black;
+  color: orangered;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+}
+
+#closeButton:hover {
+  background-color: orangered;
+  color: black;
+}
+
+#boutonEffacer {
+  background-color: black;
+  color: orangered;
+  padding: 5px 20px;
+  margin-top: 10px;
+  font-family: raleway;
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+  font-size: 1em;
+}
+
+#boutonEffacer:hover {
+  background-color: orangered;
+  color: black;
+  font-weight: bold;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-family: raleway;
+  border: 1px groove orangered;
+}
+
+table caption {
+  margin-bottom: 5px;
+  font-family: raleway;
+}
+
+/* Appliquer des styles aux cellules d'en-tête */
+th {
+  background-color: gray;
+  border: 1px solid orangered;
+  padding: 8px;
+  text-align: center;
+}
+
+/* Appliquer des styles aux cellules de données */
+td {
+  border: 1px solid orangered;
+  padding: 8px;
+  text-align: center;
+  font-family: dateStamp;
+}
+
+/* Appliquer une couleur de fond alternée aux lignes pour une meilleure lisibilité */
+tr:nth-child(even) {
+  background-color: rgb(192, 192, 192);
+}

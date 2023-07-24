@@ -4,7 +4,7 @@ let partie = 0;
 let petite = 0;
 let moyenne = 0;
 let grosse = 0;
-let results = [["Points", "Bulles éclatées"]];
+let results = [];
 const score = document.querySelector(".points");
 const bulles = document.querySelector(".bulles");
 const go = document.querySelector(".go");
@@ -12,7 +12,6 @@ score.innerHTML = 0 + " point";
 bulles.innerHTML = 0 + " bulle éclatée";
 
 go.innerHTML = "JOUER";
-
 function jouer() {
   if (go.innerHTML == "JOUER") {
     go.textContent = "PAUSE";
@@ -139,25 +138,37 @@ function resetTimer() {
   clearInterval(timerInterval);
   seconds = 5;
   isRunning = false;
-  document.getElementById("chronometre").textContent = "00:10";
+  document.getElementById("chronometre").textContent = "00:05";
 }
 
 // POPUP
-function popup() {
-  const overlay = document.createElement("div");
-  overlay.id = "popup-overlay";
-  const popup = document.createElement("div");
-  popup.id = "popup";
-  let dps = n / b;
+const overlay = document.createElement("div");
+overlay.id = "popup-overlay";
+document.body.appendChild(overlay);
+overlay.style.display = "none";
 
+const popupScores = document.createElement("div");
+popupScores.id = "popup";
+overlay.appendChild(popupScores);
+popupScores.style.display = "none";
+
+function popup() {
+  const overlay = document.querySelector("#popup-overlay");
+  overlay.style.display = "block";
+  const popup = document.querySelector("popup");
+  popupScores.style.display = "block";
+
+  let dps = n / b;
   const storedResults = localStorage.getItem("results");
   if (storedResults) {
     const results = JSON.parse(storedResults);
     results.sort(comparerPoints);
-    popup.innerHTML =
+    popupScores.innerHTML =
+      "<p><b>" +
       score.innerHTML +
       " " +
       bulles.innerHTML +
+      "</b>" +
       "<br>PPS : " +
       (dps > 0 ? parseFloat(dps.toFixed(3)) : "0") +
       (petite > 1 ? "<br>Petites bulles : " : "<br>Petite bulle : ") +
@@ -166,29 +177,31 @@ function popup() {
       moyenne +
       (grosse > 1 ? "<br>Grosses bulles : " : "<br>Grosse bulle : ") +
       grosse +
-      "<br>" +
+      "</p><br>" +
       genererContenuTableau(results);
   }
+  const boutonEffacer = document.createElement("button");
+  boutonEffacer.id = "boutonEffacer";
+  boutonEffacer.textContent = "Effacer les scores";
+  boutonEffacer.addEventListener("click", effacerScores);
+  popupScores.appendChild(boutonEffacer);
   const closeButton = document.createElement("button");
   closeButton.id = "closeButton";
-  closeButton.textContent = "Fermer";
+  closeButton.textContent = "✖";
   closeButton.addEventListener("click", () => {
     overlay.style.display = "none";
-    resetTimer();
     reset();
   });
-  popup.appendChild(closeButton);
-  overlay.appendChild(popup);
-  document.body.appendChild(overlay);
+  popupScores.appendChild(closeButton);
   overlay.style.display = "block";
 }
 
+//SCORES
 function genererContenuTableau(tableau) {
-  let html = "<table>";
-  html += "<tr>";
-  html += "<th colspan='3'>Top 5</th>";
-  html += "</tr>";
-  for (let i = 0; i < Math.min(6, tableau.length); i++) {
+  let html = "<table id='tableauScores'>";
+  html += "<caption><b>Top 5 des meilleurs scores</b></caption>";
+  html += "<tr><th>Points</th><th>Bulles éclatées</th><tr>";
+  for (let i = 0; i < Math.min(5, tableau.length); i++) {
     const ligne = tableau[i];
     html += "<tr>";
     ligne.forEach((cellule) => {
@@ -203,6 +216,45 @@ function genererContenuTableau(tableau) {
 function comparerPoints(a, b) {
   const pointsA = a[0];
   const pointsB = b[0];
-
   return pointsB - pointsA;
+}
+
+function effacerScores() {
+  localStorage.clear();
+  results = [];
+  const overlay = document.getElementById("popup-overlay");
+  overlay.style.display = "none";
+  reset();
+  alert("Tableau des scores effacé.");
+}
+
+function afficherScores() {
+  const overlay = document.querySelector("#popup-overlay");
+  overlay.style.display = "block";
+  const popup = document.querySelector("popup");
+  popupScores.style.display = "block";
+  const storedResults = localStorage.getItem("results");
+  if (storedResults) {
+    const results = JSON.parse(storedResults);
+    results.sort(comparerPoints);
+    popupScores.innerHTML = genererContenuTableau(results);
+    const boutonEffacer = document.createElement("button");
+    boutonEffacer.id = "boutonEffacer";
+    boutonEffacer.textContent = "Effacer les scores";
+    boutonEffacer.addEventListener("click", effacerScores);
+    popupScores.appendChild(boutonEffacer);
+  } else {
+    popupScores.innerHTML = "Aucun score enregistré.";
+  }
+  const closeButton = document.createElement("button");
+  closeButton.id = "closeButton";
+  closeButton.textContent = "✖";
+  closeButton.addEventListener("click", () => {
+    overlay.style.display = "none";
+    reset();
+  });
+  popupScores.appendChild(closeButton);
+  overlay.appendChild(popupScores);
+  document.body.appendChild(overlay);
+  overlay.style.display = "block";
 }

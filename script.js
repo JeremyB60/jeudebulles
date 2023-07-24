@@ -4,6 +4,7 @@ let partie = 0;
 let petite = 0;
 let moyenne = 0;
 let grosse = 0;
+let results = [["Points", "Bulles éclatées"]];
 const score = document.querySelector(".points");
 const bulles = document.querySelector(".bulles");
 const go = document.querySelector(".go");
@@ -23,14 +24,14 @@ function jouer() {
       bulle.appendChild(info);
       bulle.classList.add("bulle");
       //taille des bulles
-      const taille = Math.ceil(Math.random() * 300) + 20 + "px";
+      const taille = Math.ceil(Math.random() * 300) + 50 + "px";
       bulle.style.width = taille;
       bulle.style.height = taille;
       const width = parseInt(bulle.style.width);
-      width <= 50
+      width <= 80
         ? (info.innerHTML = 50)
-        : width > 50 && width < 100
-        ? (info.innerHTML = 10)
+        : width > 80 && width < 150
+        ? (info.innerHTML = 20)
         : (info.innerHTML = 5);
       //position
       const postop = Math.ceil(Math.random() * 90) + "vh";
@@ -39,10 +40,10 @@ function jouer() {
       bulle.style.left = posleft;
       //éclater des bulles
       bulle.addEventListener("click", () => {
-        if (width > 50 && width < 100) {
-          n += 10;
+        if (width > 80 && width < 150) {
+          n += 20;
           moyenne++;
-        } else if (width <= 50) {
+        } else if (width <= 80) {
           n += 50;
           petite++;
         } else {
@@ -96,9 +97,8 @@ function reset() {
 }
 
 // COMPTE A REBOURS
-
 let timerInterval;
-let seconds = 10;
+let seconds = 5;
 let isRunning = false;
 
 function updateTimer() {
@@ -109,6 +109,15 @@ function updateTimer() {
     document.getElementById("chronometre").textContent = "00:00";
     nettoyer();
     pause();
+
+    const storedResults = localStorage.getItem("results");
+    if (storedResults) {
+      results = JSON.parse(storedResults);
+    }
+    let resultatPartie = [n, b];
+    results.push(resultatPartie);
+    localStorage.setItem("results", JSON.stringify(results));
+
     popup();
   } else {
     const formattedTime = seconds.toString().padStart(2, "0");
@@ -128,30 +137,38 @@ function startStopTimer() {
 
 function resetTimer() {
   clearInterval(timerInterval);
-  seconds = 10;
+  seconds = 5;
   isRunning = false;
   document.getElementById("chronometre").textContent = "00:10";
 }
 
-// Fonction pour créer le popup dynamiquement
+// POPUP
 function popup() {
   const overlay = document.createElement("div");
   overlay.id = "popup-overlay";
   const popup = document.createElement("div");
   popup.id = "popup";
   let dps = n / b;
-  popup.innerHTML =
-    score.innerHTML +
-    " " +
-    bulles.innerHTML +
-    "<br>PPS : " +
-    (dps > 0 ? parseFloat(dps.toFixed(3)) : "0") +
-    "<br>Petites bulles : " +
-    petite +
-    "<br>Moyennes bulles : " +
-    moyenne +
-    "<br>Grosses bulles : " +
-    grosse;
+
+  const storedResults = localStorage.getItem("results");
+  if (storedResults) {
+    const results = JSON.parse(storedResults);
+    results.sort(comparerPoints);
+    popup.innerHTML =
+      score.innerHTML +
+      " " +
+      bulles.innerHTML +
+      "<br>PPS : " +
+      (dps > 0 ? parseFloat(dps.toFixed(3)) : "0") +
+      (petite > 1 ? "<br>Petites bulles : " : "<br>Petite bulle : ") +
+      petite +
+      (moyenne > 1 ? "<br>Moyennes bulles : " : "<br>Moyenne bulle : ") +
+      moyenne +
+      (grosse > 1 ? "<br>Grosses bulles : " : "<br>Grosse bulle : ") +
+      grosse +
+      "<br>" +
+      genererContenuTableau(results);
+  }
   const closeButton = document.createElement("button");
   closeButton.id = "closeButton";
   closeButton.textContent = "Fermer";
@@ -164,4 +181,28 @@ function popup() {
   overlay.appendChild(popup);
   document.body.appendChild(overlay);
   overlay.style.display = "block";
+}
+
+function genererContenuTableau(tableau) {
+  let html = "<table>";
+  html += "<tr>";
+  html += "<th colspan='3'>Top 5</th>";
+  html += "</tr>";
+  for (let i = 0; i < Math.min(6, tableau.length); i++) {
+    const ligne = tableau[i];
+    html += "<tr>";
+    ligne.forEach((cellule) => {
+      html += "<td>" + cellule + "</td>";
+    });
+    html += "</tr>";
+  }
+  html += "</table>";
+  return html;
+}
+
+function comparerPoints(a, b) {
+  const pointsA = a[0];
+  const pointsB = b[0];
+
+  return pointsB - pointsA;
 }

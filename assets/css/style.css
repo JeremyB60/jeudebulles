@@ -117,7 +117,6 @@ body {
 
 /* Ajoutez ce code CSS dans votre balise <style> ou un fichier CSS externe */
 #popup-overlay {
-  display: none;
   position: fixed;
   top: 0;
   left: 0;
@@ -131,7 +130,7 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); 
   width: 300px;
   padding: 20px;
   background-color: grey;

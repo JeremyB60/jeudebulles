@@ -145,19 +145,16 @@ function resetTimer() {
 const overlay = document.createElement("div");
 overlay.id = "popup-overlay";
 document.body.appendChild(overlay);
-overlay.style.display = "none";
+$("#popup-overlay").hide();
 
 const popupScores = document.createElement("div");
 popupScores.id = "popup";
 overlay.appendChild(popupScores);
-popupScores.style.display = "none";
+$("#popup").hide();
 
 function popup() {
-  const overlay = document.querySelector("#popup-overlay");
-  overlay.style.display = "block";
-  const popup = document.querySelector("popup");
-  popupScores.style.display = "block";
-
+  $("#popup-overlay").show("");
+  $("#popup").delay(500).show("slow");
   let dps = n / b;
   const storedResults = localStorage.getItem("results");
   if (storedResults) {
@@ -189,11 +186,11 @@ function popup() {
   closeButton.id = "closeButton";
   closeButton.textContent = "✖";
   closeButton.addEventListener("click", () => {
-    overlay.style.display = "none";
+    $("#popup").slideToggle("slow");
+    $("#popup-overlay").delay("1000").fadeToggle("fast");
     reset();
   });
   popupScores.appendChild(closeButton);
-  overlay.style.display = "block";
 }
 
 //SCORES
@@ -220,41 +217,43 @@ function comparerPoints(a, b) {
 }
 
 function effacerScores() {
+  overlay.style.display = "none";
+  $("#popup").fadeToggle("");
+  reset();
   localStorage.clear();
   results = [];
-  const overlay = document.getElementById("popup-overlay");
-  overlay.style.display = "none";
-  reset();
-  alert("Tableau des scores effacé.");
 }
 
 function afficherScores() {
-  const overlay = document.querySelector("#popup-overlay");
-  overlay.style.display = "block";
-  const popup = document.querySelector("popup");
-  popupScores.style.display = "block";
-  const storedResults = localStorage.getItem("results");
-  if (storedResults) {
-    const results = JSON.parse(storedResults);
-    results.sort(comparerPoints);
-    popupScores.innerHTML = genererContenuTableau(results);
-    const boutonEffacer = document.createElement("button");
-    boutonEffacer.id = "boutonEffacer";
-    boutonEffacer.textContent = "Effacer les scores";
-    boutonEffacer.addEventListener("click", effacerScores);
-    popupScores.appendChild(boutonEffacer);
+  if (go.innerHTML == "JOUER") {
+    overlay.style.display = "block";
+    $("#popup").slideToggle("");
+    const storedResults = localStorage.getItem("results");
+    if (storedResults) {
+      const results = JSON.parse(storedResults);
+      results.sort(comparerPoints);
+      popupScores.innerHTML = genererContenuTableau(results);
+      const boutonEffacer = document.createElement("button");
+      boutonEffacer.id = "boutonEffacer";
+      boutonEffacer.textContent = "Effacer les scores";
+      boutonEffacer.addEventListener("click", effacerScores);
+      popupScores.appendChild(boutonEffacer);
+    } else {
+      popupScores.innerHTML = "Aucun score enregistré.";
+    }
+    const closeButton = document.createElement("button");
+    closeButton.id = "closeButton";
+    closeButton.textContent = "✖";
+    closeButton.addEventListener("click", () => {
+      overlay.style.display = "none";
+      $("#popup").fadeToggle("");
+      reset();
+    });
+    popupScores.appendChild(closeButton);
   } else {
-    popupScores.innerHTML = "Aucun score enregistré.";
+    pause();
+    resetTimer();
+    nettoyer();
+    afficherScores();
   }
-  const closeButton = document.createElement("button");
-  closeButton.id = "closeButton";
-  closeButton.textContent = "✖";
-  closeButton.addEventListener("click", () => {
-    overlay.style.display = "none";
-    reset();
-  });
-  popupScores.appendChild(closeButton);
-  overlay.appendChild(popupScores);
-  document.body.appendChild(overlay);
-  overlay.style.display = "block";
 }

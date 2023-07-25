@@ -12,75 +12,71 @@ score.innerHTML = 0 + " point";
 bulles.innerHTML = 0 + " bulle éclatée";
 
 go.innerHTML = "JOUER";
+
 function jouer() {
+  startStopTimer();
   if (go.innerHTML == "JOUER") {
     go.textContent = "PAUSE";
-    startStopTimer();
-    function creerBulle() {
-      const bulle = document.createElement("p");
-      const info = document.createElement("p");
-      document.body.appendChild(bulle);
-      bulle.appendChild(info);
-      bulle.classList.add("bulle");
-      //taille des bulles
-      const taille = Math.ceil(Math.random() * 300) + 50 + "px";
-      bulle.style.width = taille;
-      bulle.style.height = taille;
-      const width = parseInt(bulle.style.width);
-      width <= 80
-        ? (info.innerHTML = 50)
-        : width > 80 && width < 150
-        ? (info.innerHTML = 20)
-        : (info.innerHTML = 5);
-      //position
-      const postop = Math.ceil(Math.random() * 90) + "vh";
-      const posleft = Math.ceil(Math.random() * 90) + "vw";
-      bulle.style.top = postop;
-      bulle.style.left = posleft;
-      //éclater des bulles
-      bulle.addEventListener("click", () => {
-        if (width > 80 && width < 150) {
-          n += 20;
-          moyenne++;
-        } else if (width <= 80) {
-          n += 50;
-          petite++;
-        } else {
-          n += 5;
-          grosse++;
-        }
-        b++;
-        bulle.remove();
-        score.innerHTML = n + " points";
-        if (b > 1) {
-          bulles.innerHTML = b + " bulles éclatées";
-        } else {
-          bulles.innerHTML = b + " bulle éclatée";
-        }
-      });
-      setTimeout(() => {
-        bulle.remove();
-      }, 5000);
-    }
-
     partie = setInterval(creerBulle, 500);
   } else {
     pause();
-    startStopTimer();
-    nettoyer();
   }
 }
 
-function nettoyer() {
-  const suppBulles = document.querySelectorAll("p");
-  suppBulles.forEach((element) => {
-    element.remove();
+function creerBulle() {
+  const bulle = document.createElement("p");
+  const info = document.createElement("p");
+  document.body.appendChild(bulle);
+  bulle.appendChild(info);
+  bulle.classList.add("bulle");
+  //taille des bulles
+  const taille = Math.ceil(Math.random() * 300) + 50 + "px";
+  bulle.style.width = taille;
+  bulle.style.height = taille;
+  const width = parseInt(bulle.style.width);
+  width <= 80
+    ? (info.innerHTML = 50)
+    : width > 80 && width < 150
+    ? (info.innerHTML = 20)
+    : (info.innerHTML = 5);
+  //position
+  const postop = Math.ceil(Math.random() * 90) + "vh";
+  const posleft = Math.ceil(Math.random() * 90) + "vw";
+  bulle.style.top = postop;
+  bulle.style.left = posleft;
+  //éclater des bulles
+  bulle.addEventListener("click", () => {
+    if (width > 80 && width < 150) {
+      n += 20;
+      moyenne++;
+    } else if (width <= 80) {
+      n += 50;
+      petite++;
+    } else {
+      n += 5;
+      grosse++;
+    }
+    b++;
+    bulle.remove();
+    score.innerHTML = n + " points";
+    if (b > 1) {
+      bulles.innerHTML = b + " bulles éclatées";
+    } else {
+      bulles.innerHTML = b + " bulle éclatée";
+    }
   });
+  setTimeout(() => {
+    bulle.remove();
+  }, 5000);
 }
 
 function pause() {
   clearInterval(partie);
   go.textContent = "JOUER";
+  const suppBulles = document.querySelectorAll("p");
+  suppBulles.forEach((element) => {
+    element.remove();
+  });
 }
 
 function reset() {
@@ -91,7 +87,6 @@ function reset() {
     bulles.innerHTML = 0 + " bulle éclatée";
     pause();
     resetTimer();
-    nettoyer();
   }
 }
 
@@ -106,9 +101,7 @@ function updateTimer() {
     clearInterval(timerInterval);
     isRunning = false;
     document.getElementById("chronometre").textContent = "00:00";
-    nettoyer();
     pause();
-
     const storedResults = localStorage.getItem("results");
     if (storedResults) {
       results = JSON.parse(storedResults);
@@ -116,7 +109,6 @@ function updateTimer() {
     let resultatPartie = [n, b];
     results.push(resultatPartie);
     localStorage.setItem("results", JSON.stringify(results));
-
     popup();
   } else {
     const formattedTime = seconds.toString().padStart(2, "0");
@@ -159,7 +151,7 @@ function popup() {
   const storedResults = localStorage.getItem("results");
   if (storedResults) {
     const results = JSON.parse(storedResults);
-    results.sort(comparerPoints);
+    results.sort(trierPoints);
     popupScores.innerHTML =
       "<p><b>" +
       score.innerHTML +
@@ -177,20 +169,34 @@ function popup() {
       "</p><br>" +
       genererContenuTableau(results);
   }
+  boutonEffacer();
+  boutonFermer();
+}
+
+function boutonEffacer() {
   const boutonEffacer = document.createElement("button");
   boutonEffacer.id = "boutonEffacer";
   boutonEffacer.textContent = "Effacer les scores";
-  boutonEffacer.addEventListener("click", effacerScores);
   popupScores.appendChild(boutonEffacer);
+  boutonEffacer.addEventListener("click", () => {
+    overlay.style.display = "none";
+    $("#popup").fadeToggle("");
+    reset();
+    localStorage.clear();
+    results = [];
+  });
+}
+
+function boutonFermer() {
   const closeButton = document.createElement("button");
   closeButton.id = "closeButton";
   closeButton.textContent = "✖";
+  popupScores.appendChild(closeButton);
   closeButton.addEventListener("click", () => {
-    $("#popup").slideToggle("slow");
-    $("#popup-overlay").delay("1000").fadeToggle("fast");
+    overlay.style.display = "none";
+    $("#popup").fadeToggle("fast");
     reset();
   });
-  popupScores.appendChild(closeButton);
 }
 
 //SCORES
@@ -210,18 +216,10 @@ function genererContenuTableau(tableau) {
   return html;
 }
 
-function comparerPoints(a, b) {
+function trierPoints(a, b) {
   const pointsA = a[0];
   const pointsB = b[0];
   return pointsB - pointsA;
-}
-
-function effacerScores() {
-  overlay.style.display = "none";
-  $("#popup").fadeToggle("");
-  reset();
-  localStorage.clear();
-  results = [];
 }
 
 function afficherScores() {
@@ -231,29 +229,20 @@ function afficherScores() {
     const storedResults = localStorage.getItem("results");
     if (storedResults) {
       const results = JSON.parse(storedResults);
-      results.sort(comparerPoints);
+      results.sort(trierPoints);
       popupScores.innerHTML = genererContenuTableau(results);
-      const boutonEffacer = document.createElement("button");
-      boutonEffacer.id = "boutonEffacer";
-      boutonEffacer.textContent = "Effacer les scores";
-      boutonEffacer.addEventListener("click", effacerScores);
-      popupScores.appendChild(boutonEffacer);
+      boutonEffacer();
     } else {
       popupScores.innerHTML = "Aucun score enregistré.";
     }
     const closeButton = document.createElement("button");
     closeButton.id = "closeButton";
     closeButton.textContent = "✖";
-    closeButton.addEventListener("click", () => {
-      overlay.style.display = "none";
-      $("#popup").fadeToggle("");
-      reset();
-    });
     popupScores.appendChild(closeButton);
   } else {
     pause();
     resetTimer();
-    nettoyer();
     afficherScores();
   }
+  boutonFermer();
 }

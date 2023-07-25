@@ -184,6 +184,7 @@ table {
   font-family: Arial, sans-serif;
   font-family: raleway;
   border: 1px groove orangered;
+  table-layout: fixed;width: 100%;
 }
 
 table caption {

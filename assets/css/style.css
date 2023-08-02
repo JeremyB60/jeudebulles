@@ -81,19 +81,27 @@ body {
 }
 
 .score button {
+  display: inline-block;
   padding: 10px;
-  background-color: black;
-  color: orange;
   font-size: 1rem;
   font-family: roboto;
-  border: 2px groove #ffa600a1;
   cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: orange;
+  background-color: black;
+  border: 1px solid orange;
   border-radius: 15px;
+  box-shadow: 0 2px orangered;
+}
+.score button:hover {
+  color: orangered;
 }
 
-.score button:hover {
-  background-color: orangered;
-  color: black;
+.score button:active {
+  box-shadow: 0 2px black;
+  transform: translateY(2px);
 }
 
 .bulles {

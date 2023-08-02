@@ -8,7 +8,7 @@ let results = [];
 const score = document.querySelector(".points");
 const bulles = document.querySelector(".bulles");
 const go = document.querySelector(".go");
-score.innerHTML = 0 + " point";
+score.innerHTML = 0;
 bulles.innerHTML = 0 + " bulle éclatée";
 
 go.innerHTML = "JOUER";
@@ -58,11 +58,11 @@ function creerBulle() {
     }
     b++;
     bulle.remove();
-    score.innerHTML = n + " points";
+    score.innerHTML = n;
     if (b > 1) {
-      bulles.innerHTML = b + " bulles éclatées";
+      bulles.innerHTML = b + " bulles";
     } else {
-      bulles.innerHTML = b + " bulle éclatée";
+      bulles.innerHTML = b + " bulle";
     }
   });
   setTimeout(() => {
@@ -82,9 +82,12 @@ function pause() {
 function reset() {
   if (partie !== 0) {
     n = 0;
-    score.innerHTML = 0 + " point";
+    score.innerHTML = 0;
     b = 0;
     bulles.innerHTML = 0 + " bulle éclatée";
+    petite = 0;
+    moyenne = 0;
+    grosse = 0;
     pause();
     resetTimer();
   }
@@ -155,7 +158,7 @@ function popup() {
     popupScores.innerHTML =
       "<p><b>" +
       score.innerHTML +
-      " " +
+      " points pour " +
       bulles.innerHTML +
       "</b>" +
       "<br>PPS : " +

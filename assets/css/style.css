@@ -19,12 +19,13 @@
 }
 
 body {
-  background-color: black;
+  background: linear-gradient(to top, #3a1000, #000000);
+  height: 100vh;
   overflow: hidden;
 }
 
 .bulle {
-  background-color: aqua;
+  background-color: orangered;
   border-radius: 50%;
   position: absolute;
   opacity: 0.2;
@@ -35,10 +36,13 @@ body {
   justify-content: center;
   align-items: center;
   overflow: hidden;
+  z-index: 1;
 }
 
 .bulle p {
-  color: red;
+  font-family: raleway;
+  font-weight: bold;
+  font-size: 1.5em;
 }
 
 @keyframes bubulle {
@@ -50,7 +54,6 @@ body {
 }
 
 .score {
-  background-color: grey;
   font-size: 30px;
   width: 100%;
   position: absolute;
@@ -58,8 +61,7 @@ body {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  padding: 10px;
-  z-index: 10;
+  padding: 10px 0;
   text-align: center;
   font-size: 1.5em;
   font-family: raleway;
@@ -70,28 +72,31 @@ body {
 }
 
 .score span {
-  padding: 0 20px;
+  padding: 5px 20px;
+  background-color: black;
+  font-family: dateStamp;
+  border: 1px solid orange;
+  color: orangered;
 }
 
 .score button {
-  padding: 5px 10px;
+  padding: 10px;
   background-color: black;
-  color: white;
+  color: orange;
   font-size: 1rem;
   font-family: roboto;
-  border: 2px groove rgba(255, 166, 0, 0.631);
+  border: 2px groove #ffa600a1;
   cursor: pointer;
   border-radius: 15px;
 }
 
 .score button:hover {
-  background-color: orange;
+  background-color: orangered;
   color: black;
-  border: 2px groove black;
 }
 
 .bulles {
-    display: none;
+  display: none;
 }
 
 .points,
@@ -101,21 +106,22 @@ body {
 
 @media screen and (max-width: 700px) {
   .score {
-    background-color: transparent;
-    color: whitesmoke;
-    font-size: 1em;
     gap: 3px;
   }
 
-  .score button {
+  .score span {
+    padding: 5px 10px;
+  }
+}
+@media screen and (max-width: 380px) {
+  .score {
     font-size: 1em;
   }
-  .score span {
-    padding: 0 5px;
+  .score button {
+    padding: 5px;
   }
 }
 
-/* Ajoutez ce code CSS dans votre balise <style> ou un fichier CSS externe */
 #popup-overlay {
   position: fixed;
   top: 0;
@@ -130,7 +136,7 @@ body {
   position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); 
+  transform: translate(-50%, -50%);
   width: 300px;
   padding: 20px;
   background-color: grey;
@@ -184,7 +190,8 @@ table {
   font-family: Arial, sans-serif;
   font-family: raleway;
   border: 1px groove orangered;
-  table-layout: fixed;width: 100%;
+  table-layout: fixed;
+  width: 100%;
 }
 
 table caption {
@@ -192,7 +199,6 @@ table caption {
   font-family: raleway;
 }
 
-/* Appliquer des styles aux cellules d'en-tête */
 th {
   background-color: gray;
   border: 1px solid orangered;
@@ -200,7 +206,6 @@ th {
   text-align: center;
 }
 
-/* Appliquer des styles aux cellules de données */
 td {
   border: 1px solid orangered;
   padding: 8px;
@@ -208,7 +213,6 @@ td {
   font-family: dateStamp;
 }
 
-/* Appliquer une couleur de fond alternée aux lignes pour une meilleure lisibilité */
 tr:nth-child(even) {
   background-color: rgb(192, 192, 192);
 }
